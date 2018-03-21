@@ -21,14 +21,16 @@
     // Arrive
     document.arrive('.photo-list-photo-interaction', function(){
         var el = this;
-        var dlbtn = document.createElement('div');
-        dlbtn.style.position = 'absolute';
-        dlbtn.style.top = '-60px';
-        dlbtn.style.right = '10px';
-        dlbtn.className = 'tool';
-        dlbtn.innerHTML = '<button style="min-width:0; padding:0 10px;" title="Download">Download</button>';
+        var dlbar = document.createElement('div');
+        dlbar.style.position = 'absolute';
+        dlbar.style.top = '-60px';
+        dlbar.style.right = '10px';
+        dlbar.className = 'tool';
+        dlbar.innerHTML = '<button style="min-width:0; padding:0 10px;" title="Download">Download</button>';
 
-        el.getElementsByClassName('interaction-bar')[0].appendChild(dlbtn);
+        el.getElementsByClassName('interaction-bar')[0].appendChild(dlbar);
+
+        var dlbtn = dlbar.getElementsByTagName('button')[0];
 
         // OnClick event
         dlbtn.addEventListener('click', function(){
