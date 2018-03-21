@@ -72,13 +72,20 @@
         return img.slice(0, -1).join('.') + '_d.' + img.slice(-1)[0];
     }
 
+    function isFirefox() {
+        return /Firefox\//i.test(navigator.userAgent);
+    }
+
     function download(data) {
         var largest_photo = data.sizes.size.slice(-1)[0];
         var img = prepareImgLink(largest_photo.source);
 
         var a = document.createElement('a');
         a.href = img;
-        a.click();
+        if (isFirefox())
+            a.dispatchEvent(new MouseEvent('click'));
+        else
+            a.click();
 
         console.log(img);
     }
