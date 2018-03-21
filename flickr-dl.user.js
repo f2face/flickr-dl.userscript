@@ -57,7 +57,6 @@
     }
 
     function ajaxSend(url, callback) {
-        var result = null;
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -74,16 +73,6 @@
     }
 
     function download(data) {
-        var small_photo = function(){
-            var result = '';
-            data.sizes.size.some(function(item){
-                if (item.label.toLowerCase() == 'small 320') {
-                    result = item.source;
-                    return true;
-                }
-            });
-            return result;
-        }();
         var largest_photo = data.sizes.size.slice(-1)[0];
         var img = prepareImgLink(largest_photo.source);
 
