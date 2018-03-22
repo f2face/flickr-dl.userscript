@@ -6,7 +6,7 @@
 // @author       f2face
 // @match        https://www.flickr.com/*
 // @grant        none
-// @require      https://cdn.rawgit.com/uzairfarooq/arrive/2a6ccfc7/minified/arrive.min.js
+// @require      https://cdn.rawgit.com/uzairfarooq/arrive/v2.4.1/minified/arrive.min.js
 // ==/UserScript==
 
 (function() {
@@ -55,7 +55,7 @@
     }
 
     function basename(path) {
-        return path.split('/').reverse()[0];
+        return path.split('/').slice(-1)[0];
     }
 
     function ajaxSend(url, callback) {
