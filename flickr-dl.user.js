@@ -18,39 +18,41 @@
     // Flickr API endpoint
     var api_endpoint = 'https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&format=json&nojsoncallback=1';
 
-    // Arrive
-    document.arrive('.photo-list-photo-interaction', function(){
-        var el = this;
-        var dlbar = document.createElement('div');
-        dlbar.style.position = 'absolute';
-        dlbar.style.top = '-60px';
-        dlbar.style.right = '10px';
-        dlbar.className = 'tool';
-        dlbar.innerHTML = '<button style="min-width:0; padding:0 10px;" title="Download">Download</button>';
+    function addDownloadButton(element) {
+        // Arrive
+        document.arrive(element, function(){
+            var el = this;
+            var dlbar = document.createElement('div');
+            dlbar.style.position = 'absolute';
+            dlbar.style.top = '-60px';
+            dlbar.style.right = '10px';
+            dlbar.className = 'tool';
+            dlbar.innerHTML = '<button style="min-width:0; padding:0 10px;" title="Download">Download</button>';
 
-        el.getElementsByClassName('interaction-bar')[0].appendChild(dlbar);
+            el.getElementsByClassName('interaction-bar')[0].appendChild(dlbar);
 
-        var dlbtn = dlbar.getElementsByTagName('button')[0];
+            var dlbtn = dlbar.getElementsByTagName('button')[0];
 
-        // OnClick event
-        dlbtn.addEventListener('click', function(){
-            var uri = el.getElementsByClassName('overlay')[0].getAttribute('href');
-            var regex_patt = /\/(\d+)\//gi;
-            var photo_id = regex_patt.exec(uri)[1];
-            var request_url = api_endpoint + '&api_key=' + api_key + '&photo_id=' + photo_id + '&csrf=' + window.YUI_config.flickr.csrf.token;
-            dlbtn.disabled = true;
-            ajaxSend(request_url, function(data){
-                data = JSON.parse(data);
-                download(data);
-                dlbtn.disabled = false;
+            // OnClick event
+            dlbtn.addEventListener('click', function(){
+                var uri = el.getElementsByClassName('overlay')[0].getAttribute('href');
+                var regex_patt = /\/(\d+)\//gi;
+                var photo_id = regex_patt.exec(uri)[1];
+                var request_url = api_endpoint + '&api_key=' + api_key + '&photo_id=' + photo_id + '&csrf=' + window.YUI_config.flickr.csrf.token;
+                dlbtn.disabled = true;
+                ajaxSend(request_url, function(data){
+                    data = JSON.parse(data);
+                    download(data);
+                    dlbtn.disabled = false;
+                });
             });
         });
-    });
 
-    // Leave
-    document.leave('.photo-list-photo-interaction', function(){
-        document.unbindArrive(this);
-    });
+        // Leave
+        document.leave(element, function(){
+            document.unbindArrive(this);
+        });
+    }
 
     function basename(path) {
         return path.split('/').reverse()[0];
@@ -89,4 +91,6 @@
 
         console.log(img);
     }
+
+    addDownloadButton('.photo-list-photo-interaction');
 })();
