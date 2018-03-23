@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Flickr Downloader
 // @namespace    https://github.com/f2face/flickr-dl.userscript
-// @version      0.1
+// @version      0.2
 // @description  A userscript for downloading Flickr photos.
 // @author       f2face
 // @match        https://www.flickr.com/*
@@ -22,23 +22,30 @@
         // Arrive
         document.arrive(element, function(){
             var el = this;
-            var dlbar = document.createElement('div');
-            dlbar.style.position = 'absolute';
-            dlbar.style.top = '-60px';
-            dlbar.style.right = '10px';
-            dlbar.className = 'tool';
-            dlbar.innerHTML = '<button style="min-width:0; padding:0 10px;" title="Download">Download</button>';
-
-            el.getElementsByClassName('interaction-bar')[0].appendChild(dlbar);
-
+            var dlbar = createButton();
             var dlbtn = dlbar.getElementsByTagName('button')[0];
+            var photo_url = window.location.href;
+            var interaction_bar = el.getElementsByClassName('interaction-bar');
+            if (interaction_bar.length > 0) {
+                dlbar.style.position = 'absolute';
+                dlbar.style.top = '-60px';
+                dlbar.style.right = '10px';
+                interaction_bar[0].appendChild(dlbar);
+                photo_url = el.getElementsByClassName('overlay')[0].getAttribute('href');
+            }
+            else {
+                dlbar.style.marginBottom = '10px';
+                dlbar.style.paddingBottom = '10px';
+                dlbar.style.borderBottom = '1px solid #cfd6d9';
+                el.getElementsByClassName('sub-photo-right-view')[0].prepend(dlbar);
+            }
 
             // OnClick event
             dlbtn.addEventListener('click', function(){
-                var uri = el.getElementsByClassName('overlay')[0].getAttribute('href');
+                var uri = photo_url;
                 var regex_patt = /\/(\d+)\//gi;
                 var photo_id = regex_patt.exec(uri)[1];
-                var request_url = api_endpoint + '&api_key=' + api_key + '&photo_id=' + photo_id + '&csrf=' + window.YUI_config.flickr.csrf.token;
+                var request_url = api_endpoint + '&api_key=' + api_key + '&photo_id=' + photo_id + '&csrf=' + getCsrfToken();
                 dlbtn.disabled = true;
                 ajaxSend(request_url, function(data){
                     data = JSON.parse(data);
@@ -52,6 +59,17 @@
         document.leave(element, function(){
             document.unbindArrive(this);
         });
+    }
+
+    function createButton() {
+        var dlbar = document.createElement('div');
+        dlbar.className = 'tool';
+        dlbar.innerHTML = '<button style="min-width:0; padding:0 10px; z-index:100000;" title="Download">Download</button>';
+        return dlbar;
+    }
+
+    function getCsrfToken() {
+        return window.YUI_config.flickr.csrf.token;
     }
 
     function basename(path) {
@@ -81,7 +99,6 @@
     function download(data) {
         var largest_photo = data.sizes.size.slice(-1)[0];
         var img = prepareImgLink(largest_photo.source);
-
         var a = document.createElement('a');
         a.href = img;
         if (isFirefox())
@@ -93,4 +110,5 @@
     }
 
     addDownloadButton('.photo-list-photo-interaction');
+    addDownloadButton('.photo-page-scrappy-view');
 })();
