@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Flickr Downloader
 // @namespace    https://github.com/f2face/flickr-dl.userscript
-// @version      0.2
+// @version      0.2.1
 // @description  A userscript for downloading Flickr photos.
 // @author       f2face
 // @match        https://www.flickr.com/*
@@ -97,6 +97,11 @@
     }
 
     function download(data) {
+        if (!data.hasOwnProperty('sizes')) {
+            var error_msg = 'An error occured. Please refresh the page.';
+            alert(data.hasOwnProperty('message') ? error_msg+"\r\nError: "+data.message : error_msg);
+            return false;
+        }
         var largest_photo = data.sizes.size.slice(-1)[0];
         var img = prepareImgLink(largest_photo.source);
         var a = document.createElement('a');
@@ -109,6 +114,9 @@
         console.log(img);
     }
 
+    // Add download button on photos grid
     addDownloadButton('.photo-list-photo-interaction');
+
+    // Add download button on single photo page
     addDownloadButton('.photo-page-scrappy-view');
 })();
