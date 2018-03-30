@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Flickr Downloader
 // @namespace    https://github.com/f2face/flickr-dl.userscript
-// @version      0.2.1
+// @version      0.2.1.1
 // @description  A userscript for downloading Flickr photos.
 // @author       f2face
 // @match        https://www.flickr.com/*
