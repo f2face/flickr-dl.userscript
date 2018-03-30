@@ -12,9 +12,6 @@
 (function() {
     'use strict';
 
-    // Flickr API key
-    var api_key = window.YUI_config.flickr.api.site_key;
-
     // Flickr API endpoint
     var api_endpoint = 'https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&format=json&nojsoncallback=1';
 
@@ -45,7 +42,7 @@
                 var uri = photo_url;
                 var regex_patt = /\/(\d+)\//gi;
                 var photo_id = regex_patt.exec(uri)[1];
-                var request_url = api_endpoint + '&api_key=' + api_key + '&photo_id=' + photo_id + '&csrf=' + getCsrfToken();
+                var request_url = api_endpoint + '&api_key=' + getApiSiteKey() + '&photo_id=' + photo_id + '&csrf=' + getCsrfToken();
                 dlbtn.disabled = true;
                 ajaxSend(request_url, function(data){
                     data = JSON.parse(data);
@@ -66,6 +63,10 @@
         dlbar.className = 'tool';
         dlbar.innerHTML = '<button style="min-width:0; padding:0 10px; z-index:100000;" title="Download">Download</button>';
         return dlbar;
+    }
+
+    function getApiSiteKey() {
+        return window.YUI_config.flickr.api.site_key;
     }
 
     function getCsrfToken() {
