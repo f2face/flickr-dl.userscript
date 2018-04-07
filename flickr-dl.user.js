@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Flickr Downloader
 // @namespace    https://github.com/f2face/flickr-dl.userscript
-// @version      0.2.1.1
+// @version      0.2.1.2
 // @description  A userscript for downloading Flickr photos.
 // @author       f2face
 // @match        https://www.flickr.com/*
@@ -40,7 +40,7 @@
             // OnClick event
             dlbtn.addEventListener('click', function(){
                 var uri = photo_url;
-                var regex_patt = /\/(\d+)\//gi;
+                var regex_patt = /\/(\d+)\/?/gi;
                 var photo_id = regex_patt.exec(uri)[1];
                 var request_url = api_endpoint + '&api_key=' + getApiSiteKey() + '&photo_id=' + photo_id + '&csrf=' + getCsrfToken();
                 dlbtn.disabled = true;
